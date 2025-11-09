@@ -3,12 +3,10 @@ import { EditorState, StateEffect, Transaction, StateField } from "@codemirror/s
 
 export const setEnumEffect = StateEffect.define<Record<string, number>>();
 export const setMoneyEffect = StateEffect.define<Record<string, number>>();
-export const setDateEffect = StateEffect.define<Record<string, number>>();
-export const setPercentEffect = StateEffect.define<Record<string, number>>();
-export const setCheckboxEffect = StateEffect.define<Record<string, number>>();
-const resetEffect = StateEffect.define();
-
+export const setDateEffect = StateEffect.define<Record<string, number>>(); //TODO
 export const setIndexEffect = StateEffect.define<Record<string, number>>();
+
+const resetEffect = StateEffect.define();
 export const TypeEffectsField = StateField.define<Record<string, number> | null>({
   create(state: EditorState) {
     return null;
