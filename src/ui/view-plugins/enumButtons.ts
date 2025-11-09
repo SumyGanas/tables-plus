@@ -16,7 +16,7 @@ class PlaceholderWidget extends WidgetType {
     const btn = document.createElement('button');
     btn.innerText = " ✎ ";
 
-    btn.onmousedown = ((ev: MouseEvent)=>{
+    btn.onclick = ((ev: MouseEvent)=>{
         ev.preventDefault();
         const headerName = findButtonHeader(btn)
         const editor = markdownView.editor
@@ -30,19 +30,22 @@ class PlaceholderWidget extends WidgetType {
             const menu = new Menu()
             menuItems.forEach((menuItem)=>{
                  menu.addItem((item) =>
-                    item.setTitle(menuItem).onClick(() => {
+                    item.setTitle(menuItem).onClick((evt) => {
                         const pos = view.posAtDOM(btn);
                         view.dispatch({
                             changes: { from: pos, to: pos+5, insert: menuItem },
                         });
-                    })
-                );
-            })
+                        
+                       
+                }));
+            });
+
             menu.showAtMouseEvent(ev)
+            }
+        });
         }
-        })
-        }
-        })
+
+    });
 
         return btn;
     }
