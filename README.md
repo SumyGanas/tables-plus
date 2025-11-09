@@ -19,10 +19,10 @@ _Note: Currently, the type setting needs to be re-done to auto-populate any newl
 
 # Usage
 1. Create a table and fill in the headers
-<img src=".github/Note.png" width="150" alt="create a table">
+<img src=".github/Note.png" width="400" height="300" alt="create a table">
 
 2. Highlight the text inside the table header
-<img src=".github/Highlight.png" width="150" alt="highlight text">
+<img src=".github/Highlight.png" width="300" height="200" alt="highlight text">
 
 3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to create a table-config code block open a modal. If you don't plan on using enums, you can delete this code block but I reccommend keeping it for future backward compatibility.
 
