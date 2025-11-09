@@ -1,7 +1,6 @@
 import { ViewUpdate, EditorView, ViewPlugin, Decoration, DecorationSet,WidgetType } from '@codemirror/view';
 import {MatchDecorator} from "@codemirror/view"
 import { Menu, MarkdownPostProcessorContext, MarkdownView, MarkdownPostProcessor, App } from 'obsidian';
-import { Range } from '@codemirror/state';
 import { getTableEnumOptions } from '@/src/plugin-logic/modalConfigSettings';
 import { editorInfoField } from 'obsidian';
 
@@ -15,7 +14,7 @@ class PlaceholderWidget extends WidgetType {
     const markdownView = view.state.field(editorInfoField)
     
     const btn = document.createElement('button');
-    btn.innerText = "[ ✎ ]";
+    btn.innerText = " ✎ ";
 
     btn.onmousedown = ((ev: MouseEvent)=>{
         ev.preventDefault();
@@ -52,63 +51,13 @@ class PlaceholderWidget extends WidgetType {
       }
   }
 
-  function getDecorations(view: EditorView): DecorationSet {
-    const decorations: Range<Decoration>[] = [];
-    const regex = /\[ ✎ \]/g;
-    const cursor = view.state.selection.main.head;
-
-    for (const { from, to } of view.visibleRanges) {
-        const text = view.state.doc.sliceString(from, to);
-        let match;
-        while ((match = regex.exec(text)) !== null) {
-          const start = from + match.index;
-          const end = start + match[0].length;
-    
-          const cursorInside = cursor >= start && cursor <= end;
-          if (!cursorInside) {
-            decorations.push(
-              Decoration.replace({
-                widget: new PlaceholderWidget(),
-              }).range(start, end)
-            );
-          } else {
-            decorations.push(
-              Decoration.mark({ class: 'is-editing-placeholder' }).range(start, end)
-            );
-          }
-        }
-      };
-    
-      return Decoration.set(decorations);
-}
-
-export const placeholderViewPlugin = ViewPlugin.fromClass(
-    class {
-      decorations: DecorationSet;
-  
-      constructor(view: EditorView) {
-        this.decorations = getDecorations(view);
-      }
-  
-      update(update: ViewUpdate) {
-        if (update.docChanged || update.selectionSet || update.viewportChanged) {
-          this.decorations = getDecorations(update.view);
-        }
-      }
-    },
-    {
-      decorations: (v) => v.decorations,
-    }
-  );
 
 const placeholderMatcher = new MatchDecorator({
-    regexp: /\[ ✎ \]/g,
+    regexp: /\[\ ✎ \]/g,
     decoration: match => Decoration.replace({
       widget: new PlaceholderWidget(),
     })
   })
-
-
 
 export const createPlaceholderPostProcessor = (app: App): MarkdownPostProcessor => {
     return (element: HTMLElement, context: MarkdownPostProcessorContext) => {
@@ -121,7 +70,7 @@ export const createPlaceholderPostProcessor = (app: App): MarkdownPostProcessor 
             if (cell.textContent === targetString) {
                 cell.empty(); 
                 const btn = cell.createEl('button');
-                btn.innerText = targetString;
+                btn.innerText = " ✎ ";
                 
                 btn.onClickEvent((ev: MouseEvent) => {
                 const headerName = findButtonHeader(btn);
