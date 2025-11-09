@@ -5,6 +5,10 @@ import { markdown } from "@codemirror/lang-markdown";
 import { tableViewPlugin } from '@/src/ui/view-plugins/tableView';
 import { findIndex } from '@/src/plugin-logic/tableLogic';
 import { currencyField } from './ui/view-plugins/currencyState';
+import { tableConfigStateField } from './state-effects/enumEffects';
+import { getTableId } from './plugin-logic/modalConfigSettings';
+import { placeholderViewPlugin, placeholders } from './ui/view-plugins/enumButtons';
+import { createPlaceholderPostProcessor } from './ui/view-plugins/enumButtons';
 
 interface PluginSettings {
 	mySetting: string;
@@ -17,36 +21,59 @@ const DEFAULT_SETTINGS: PluginSettings = {
 export default class TablesPlusPlugin extends Plugin {
     settings: PluginSettings;
     async onload() {
-    this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField]);
+    const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+    this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholderViewPlugin, placeholders]);
     this.registerEditorExtension(markdown());
+    this.registerMarkdownPostProcessor(
+        createPlaceholderPostProcessor(this.app)
+      );
+    // this.registerMarkdownCodeBlockProcessor(
+    //     'table-config', // The name of your code block
+    //     (source, el, ctx) => {
+    //       console.log("code-block registered")
+    //       ctx.addChild(
+    //         new TableConfigRenderer(el, source, ctx, this)
+    //       );
+    //     }
+    //   );
     
     console.log('loading plugin')
-    let selectedType: string 
+    
     let selectedElement: HTMLElement | null | undefined
-    const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+    
     
     
     // Make sure the user is editing a Markdown file.
     if (view) {
         this.addRibbonIcon('dice', 'Tables Plus', (evt: MouseEvent) => { 
-                    
                     if (view.editor.somethingSelected()) {
-
                         const selection = document.getSelection()
                         if (selection && selection.rangeCount > 0) {
                             const range = selection.getRangeAt(0);
                             const selectionContainer = range.commonAncestorContainer;
                             const babyDiv = selectionContainer.nodeType === Node.TEXT_NODE ? selectionContainer.parentElement : selectionContainer as HTMLElement;
                             if(babyDiv) {
+                                let tableID: string = ""
                                 selectedElement = babyDiv.closest('th')
-                                new TypesModal(this.app,view,(type)=>{
-                                new Notice(`Selected: ${type}`)
-                                selectedType = type
-                                const headerRow = selectedElement?.closest("tr")
-                                selectedElement?.setAttribute("modified-header", `${type}`);
-                                const cellIndex = findIndex(headerRow)
-                                selectedElement?.setAttribute("cell-index", `${cellIndex}`);
-                            }).open()
+                                const selectedtext = selection.toString()
+                                const TableID = getTableId(view.editor)
+                                const table = babyDiv.closest("table")
+                                
+                                TableID.then((c)=>{
+                                    tableID = c
+                                    if (table) table.id = c
+                                    if (tableID.length > 0){
+                                        new TypesModal(this.app,view,tableID,selectedtext,(type)=>{
+                                        new Notice(`Selected: ${type}`)
+                                        selectedElement?.setAttribute("modified-header", `${type}`);
+                                        const headerRow = selectedElement?.closest("tr")
+                                        const cellIndex = findIndex(headerRow)
+                                        selectedElement?.setAttribute("cell-index", `${cellIndex}`);
+                                        }).open()
+                                    } 
+                                })
+                                
+                            
                             } else {
                                 console.log("Error - No baby div found")
                             }
@@ -56,6 +83,31 @@ export default class TablesPlusPlugin extends Plugin {
                     }
                     
                 });
+
+                // this.addCommand({
+                //     id:"aaaaaaaaa",
+                //     name:"aaaaaaaaaa",
+                //     editorCallback(editor, view) {
+                //         // @ts-ignore, not typed
+		        //         const editorView = view.editor.cm as EditorView;
+                //         if (!editorView) return;
+                //         const selection = editorView.state.selection.main;
+                //         if (selection.empty) {
+                //         // Optional: handle no selection (e.g., insert at cursor)
+                //         // For this example, we'll just return
+                //         console.log("No selection, command aborted.");
+                //         return;
+                //         }
+                //         editorView.dispatch({
+                //             effects: [
+                //               addObsidianWidgetEffect.of({
+                //                 from: selection.from,
+                //                 to: selection.to,
+                //               }),
+                //             ],
+                //           });
+                //     }
+                // })
     }
     //...
     // This adds a settings tab so the user can configure various aspects of the plugin
@@ -118,3 +170,4 @@ class SampleSettingTab extends PluginSettingTab {
 				}));
 	}
 }
+
