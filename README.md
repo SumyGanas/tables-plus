@@ -23,7 +23,7 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
 3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to create a table-config code block open a modal.
 <img src=".github/TableConfig.png" width="400" height="300" alt="table congif block">
 
-📝 _If you don't plan on using enums, you can delete this code block but I reccommend keeping it for future backward compatibility._
+📝 _If you don't plan on using enums, you can delete this code block but I reccommend keeping it for future backward compatibility. It will show up again if you try to re-index or format any new rows_
 
 **Modal Options**
 
