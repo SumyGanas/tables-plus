@@ -36,6 +36,8 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
 
 
 - Enums: Once you add the enums, the options field in the code-block will be auto-updated with your entered enum. You can edit your enums via this code block or through the modal. The edit icon will turn into a button once you're inside the table cell. This button will turn into a dropdown menu that can be used to easily select any option.
+<img src=".github/optionConfig.png" width="400" height="300" alt="option config">
+<img src=".github/dropdown.png" width="400" height="300" alt="dropdown">
 
 
 ## Additional features I may add in the future:
