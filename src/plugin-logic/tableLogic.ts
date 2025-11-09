@@ -15,7 +15,6 @@ export function findIndex(headerRow: HTMLTableRowElement | null | undefined): nu
 
 function findCellInsertIndex(lineText: string, cellPre: number): {start: number; end: number} | null {
   const cell = parseInt(String(cellPre),10)
-  let currentPipeIndex = -1;
   const pipeRegexp: RegExp = /[|]/g;
   const pipes = Array.from(lineText.matchAll(pipeRegexp))
   const startPipeIndex = pipes[cell].index
@@ -86,7 +85,6 @@ export function enumTable(view: EditorView, table: HTMLElement | null, cell: num
       const insertfromPos =  firstPipeIndex + 1;
       const inserttoPos = secondPipeIndex;
       const cellText = view.state.doc.sliceString(insertfromPos, inserttoPos)
-      const smilingFaceWithSmilingEyes = "\u{25A9}";
       const buttonImage = `[ ✎ ]`
       if (cellText.trim().length <= 0) { //rn only adding to empty cells 
       changes.push({ 
@@ -100,14 +98,6 @@ export function enumTable(view: EditorView, table: HTMLElement | null, cell: num
     currentLineNumber++;
   }
   return changes; 
-}
-
-export function countTableRows( table: HTMLTableElement | null): number {
-  if (!table || table.tagName !== 'TABLE') {
-    console.error("The provided element is not a table.");
-    return 0;
-  }
-  return table.rows.length - 1;
 }
 
 
