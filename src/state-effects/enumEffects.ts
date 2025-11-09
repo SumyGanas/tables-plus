@@ -1,21 +1,39 @@
-import { EditorState, StateEffect, Transaction, StateField } from "@codemirror/state"
+import { StateEffect, StateField } from "@codemirror/state"
 
+export interface TableConfigPayload {
+  key: string;
+  columnName: string;
+  tableConfig: any;
+}
 export const setEnumListEffect = StateEffect.define<string[]>();
+export const upsertTableConfigEffect = StateEffect.define<TableConfigPayload>();
+export const removeTableConfigEffect = StateEffect.define<string>();
+export const setTableIdEffect = StateEffect.define<string>();
 
-export const EnumEffects = StateField.define<string[]>({
-    create(state: EditorState) {
-      return [];
-    },
-  
-    update(value: string[], transaction: Transaction):  string[]{
-        let enums = value
-        for (const effect of transaction.effects) {
-        if (effect.is(setEnumListEffect)) {
-            enums = effect.value
-            return enums
+type ConfigMap = Map<string, any>;
+
+export const tableConfigStateField = StateField.define<ConfigMap>({
+  create() {
+    const initMap = new Map<string, any>();
+    return new Map<string, any>();
+  },
+
+  update(oldValue, tr) {
+    if (tr.effects.length === 0) {
+      return oldValue;
     }
-  }
-return enums },
+
+    let newValue = new Map(oldValue);
+
+    for (let effect of tr.effects) {
+      if (effect.is(upsertTableConfigEffect)) {
+        newValue.set(effect.value.key, effect.value.tableConfig);
+      }
+
+      if (effect.is(setTableIdEffect)) {
+        newValue.set("tableId",effect.value)
+      }
+    }
+    return newValue;
+  },
 });
-  
-  
