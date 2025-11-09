@@ -33,7 +33,7 @@ function findCellInsertIndex(lineText: string, cellPre: number): {start: number;
   
 }
 
-export function index_table(view: EditorView, table: HTMLElement | null, cell: number): ChangeSpec[] | undefined {
+export function indexTable(view: EditorView, table: HTMLElement | null, cell: number): ChangeSpec[] | undefined {
   const changes: ChangeSpec[] = [];
   let rowIndex = 1
   const tableStartPos = view.posAtDOM(table as Node);
@@ -67,6 +67,40 @@ export function index_table(view: EditorView, table: HTMLElement | null, cell: n
   return changes; 
 }
 
+export function enumTable(view: EditorView, table: HTMLElement | null, cell: number): ChangeSpec[] | undefined {
+  const changes: ChangeSpec[] = [];
+  let rowIndex = 1
+  const tableStartPos = view.posAtDOM(table as Node);
+  if (tableStartPos === null) return;
+  const startLine: Line = view.state.doc.lineAt(tableStartPos);
+  let currentLineNumber = startLine.number + 2;
+  while (currentLineNumber <= view.state.doc.lines) {
+    const line = view.state.doc.line(currentLineNumber);
+    if (!line.text.includes('|')) {
+      break;
+    }
+    const PipeIndeces = findCellInsertIndex(line.text,cell)
+    if (PipeIndeces) {
+      const firstPipeIndex = line.from + PipeIndeces.start + 1;
+      const secondPipeIndex = line.from + PipeIndeces.end;
+      const insertfromPos =  firstPipeIndex + 1;
+      const inserttoPos = secondPipeIndex;
+      const cellText = view.state.doc.sliceString(insertfromPos, inserttoPos)
+      const smilingFaceWithSmilingEyes = "\u{25A9}";
+      const buttonImage = `[ ✎ ]`
+      if (cellText.trim().length <= 0) { //rn only adding to empty cells 
+      changes.push({ 
+        from: insertfromPos,
+        to: inserttoPos,
+        insert: buttonImage
+      });
+      }
+    }
+    rowIndex++;
+    currentLineNumber++;
+  }
+  return changes; 
+}
 
 export function countTableRows( table: HTMLTableElement | null): number {
   if (!table || table.tagName !== 'TABLE') {
@@ -149,7 +183,3 @@ export function moneyFormat(view: EditorView, table: HTMLElement | null, cell: n
   return changes;
 }
 
-
-export function checkEmpty() {
-  
-}
