@@ -30,7 +30,7 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
 <img src=".github/Modal.png" width="400" height="300" alt="modal">
 
 - Indexing: Select index and click outside the table for the plugin to auto-populate your index column
-<img src=".github/indexed.png" width="400" height="300" alt="table congif block">
+<img src=".github/indexed.png" width="400" height="300" alt="table config block">
 
 - Money: Select a currency or add your own. Click outside the table for currency formatting. This will only work in cells that have numbers.
 
