@@ -1,23 +1,9 @@
 import { EditorView, ViewPlugin, ViewUpdate, PluginValue } from "@codemirror/view";
-import { index_table, moneyFormat } from "@/src/plugin-logic/tableLogic";
-import { setIndexEffect } from "@/src/state-effects/TypeEffects";
 import { ChangeSpec } from "@codemirror/state"
+import { setEnumEffect, setIndexEffect } from "@/src/state-effects/TypeEffects";
+import { enumTable, indexTable, moneyFormat } from "@/src/plugin-logic/tableLogic";
 import { addCurrencies, currencySet } from "./currencyState";
-
-export function updateTableIds(table: HTMLTableElement): {tableID: string, rows: number} {
-    const attributeElem = table?.closest('th');
-    attributeElem?.removeAttribute('modified-header')
-    const tableElement = table?.closest('table');
-    const tableID = table?.id
-    const rows = table?.rows?.length - 1 
-    if (tableID) {
-      return {tableID, rows}
-    } else {
-      tableElement?.setAttribute("id",crypto.randomUUID())
-      const tableID = table?.id
-      return {tableID, rows}
-    }
-  }
+import { tableConfigStateField } from "@/src/state-effects/enumEffects";
 
 class TableViewPlugin implements PluginValue {
     view: EditorView;
@@ -36,33 +22,45 @@ class TableViewPlugin implements PluginValue {
                             setTimeout(() => {
                                 if (table) {
                                   let changes: ChangeSpec[] | undefined = undefined
+                                  const rows = table?.rows?.length - 1 
                                   const indexElem = this.view.dom.querySelector('[cell-index]');
                                   const cellIndex = (indexElem?.getAttribute("cell-index") as unknown) as number
                                   const attributeKey = table.getAttribute("modified-header");
-                                  const {tableID, rows} = updateTableIds(table);
+                                  const configs = this.view.state.field(tableConfigStateField)
+                                  const TableId = configs.get("tableId")
                                   if (attributeKey === "Index") {
-                                      const changes = index_table(this.view, table, cellIndex);
+                                      changes = indexTable(this.view, table, cellIndex);
                                       if (changes) {
                                         this.view.dispatch({
                                         changes: changes, 
-                                        effects: setIndexEffect.of({[tableID]: rows })
+                                        effects: setIndexEffect.of({[TableId]: rows }) //Changed
                                       });
-                                  }}
-                                  
-                                  else if (attributeKey?.contains("Money")) {
+                                  }
+                                } else if (attributeKey?.contains("Money")) {
                                     addCurrencies(this.view, currencySet)
                                     const currencyCode = attributeKey.toString().charAt(6)
-                                    const changes = moneyFormat(this.view, table, cellIndex, currencyCode);
+                                    changes = moneyFormat(this.view, table, cellIndex, currencyCode);
                                     if (changes) {
                                       this.view.dispatch({
                                       changes: changes, 
-                                      effects: setIndexEffect.of({[tableID]: rows })
-                                    });
-                                }}
-                                  indexElem?.removeAttribute("cell-index")
+                                      effects: setIndexEffect.of({[TableId]: rows }) //Changed
+                                      });
+                                    }
+                                    //adds text to the cells below which is picked up by different view plugin 
+                                } else if (attributeKey === "Enum") {
+                                    changes = enumTable(this.view, table, cellIndex)
+                                    if (changes) {
+                                      this.view.dispatch({
+                                      changes: changes, 
+                                      effects: [setEnumEffect.of({[TableId]: rows })] //Changed
+                                      });
+                                    }
                                 }
-                                  
-                              }, 0);
+                                    indexElem?.removeAttribute("cell-index")
+                                    table.removeAttribute("modified-header")
+                                  }
+                                    
+                                }, 0);
 
                             });
                           }
@@ -77,6 +75,7 @@ class TableViewPlugin implements PluginValue {
     destroy() {
 
     }
+
   }
   
   export const tableViewPlugin = ViewPlugin.fromClass(TableViewPlugin);
