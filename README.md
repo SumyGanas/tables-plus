@@ -20,17 +20,20 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
 2. Highlight the text inside the table header
 <img src=".github/Highlight.png" width="300" height="200" alt="highlight text">
 
-3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to create a table-config code block open a modal.
-<img src=".github/TableConfig.png" width="400" height="300" alt="table congif block">
+3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to create a table-config code block and open a modal.
+<img src=".github/config.png" width="400" height="300" alt="modal">
 
 📝 _If you don't plan on using enums, you can delete this code block but I reccommend keeping it for future backward compatibility. It will show up again if you try to re-index or format any new rows_
 
 **Modal Options**
 
 <img src=".github/Modal.png" width="400" height="300" alt="modal">
+
 - Indexing: Select index and click outside the table for the plugin to auto-populate your index column
+<img src=".github/indexed.png" width="400" height="300" alt="table congif block">
 
 - Money: Select a currency or add your own. Click outside the table for currency formatting. This will only work in cells that have numbers.
+
 
 - Enums: Once you add the enums, the options field in the code-block will be auto-updated with your entered enum. You can edit your enums via this code block or through the modal. The edit icon will turn into a button once you're inside the table cell. This button will turn into a dropdown menu that can be used to easily select any option.
 
