@@ -1,8 +1,4 @@
-<h1 align="center">
-obsidian-tables-plus
-</h1>
-
-<h2 align="center">Obsidian Tables Plus</h2>
+# obsidian-tables-plus
 
 ## Overview
 This plugin creates a ribbon-button that pops open a modal when the user highlights the header text in a table cell. This modal can be used to set the column types.
