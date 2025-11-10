@@ -131,9 +131,6 @@ export class TypesModal extends Modal {
                             this.close()
                         }
                     })
-                    // new DropdownComponent(this.modalEl).addOptions().onChange((enum: string)=>{
-                    //     enumType = enum
-                    // })
                 } else {
                     onSelect(val)
                     this.close()  
