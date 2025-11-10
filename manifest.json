@@ -3,7 +3,9 @@
 	"name": "Tables Plus",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Enhanced features for obsidian tables ",
+	"description": "Enhance your tables with auto-indexing, currency formatting, and dropdown menus.",
 	"author": "Sumy Ganas",
-	"isDesktopOnly": false
+	"fundingUrl": "https://ko-fi.com/sgan73",
+	"isDesktopOnly": true,
+	"repo": "SumyGanas/tables-plus"
 }

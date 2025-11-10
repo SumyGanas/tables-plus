@@ -1,4 +1,4 @@
-import { Plugin, MarkdownView, App, Notice, PluginSettingTab  } from 'obsidian';
+import { Plugin, MarkdownView, App, Notice } from 'obsidian';
 import { TypesModal } from '@/src/ui/modal/modal';
 import { TypeEffectsField } from '@/src/state-effects/TypeEffects';
 import { markdown } from "@codemirror/lang-markdown";
@@ -7,23 +7,10 @@ import { findIndex } from '@/src/plugin-logic/tableLogic';
 import { currencyField } from './ui/view-plugins/currencyState';
 import { tableConfigStateField } from './state-effects/enumEffects';
 import { getTableId } from './plugin-logic/modalConfigSettings';
-import {  placeholders } from './ui/view-plugins/enumButtons';
-import { createPlaceholderPostProcessor } from './ui/view-plugins/enumButtons';
-import { TablesPlusSettingTab } from './settings';
+import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins/enumButtons';
 
-interface PluginSettings {
-	mySetting: string;
-    hideBlocks: boolean;
-}
-
-const DEFAULT_SETTINGS: PluginSettings = {
-	mySetting: 'default',
-    hideBlocks: false,
-}
 
 export default class TablesPlusPlugin extends Plugin {
-    settings: PluginSettings;
-    styleEl: HTMLElement;
     async onload() {
     await this.loadSettings()
 
@@ -35,10 +22,6 @@ export default class TablesPlusPlugin extends Plugin {
       );
     
     let selectedElement: HTMLElement | null | undefined
-
-    this.styleEl = document.head.createEl("style", {
-        attr: { id: "tables-plus-styles" },
-      });
     
     if (view) {
         this.addRibbonIcon('dice', 'Tables Plus', (evt: MouseEvent) => { 
@@ -79,7 +62,7 @@ export default class TablesPlusPlugin extends Plugin {
 
     }
 
-		this.addSettingTab(new TablesPlusSettingTab(this.app, this));
+		//this.addSettingTab(new TablesPlusSettingTab(this.app, this));
 
 		this.registerInterval(window.setInterval(() => 5 * 60 * 1000));
 
@@ -89,11 +72,11 @@ export default class TablesPlusPlugin extends Plugin {
     }
 
     async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		//this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
 	}
 
 	async saveSettings() {
-		await this.saveData(this.settings);
+		//await this.saveData(this.settings);
 	}
 }
 
