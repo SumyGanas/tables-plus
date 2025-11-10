@@ -1,7 +1,6 @@
-import { Plugin, MarkdownView, App, Notice, PluginSettingTab  } from 'obsidian';
+import { App, PluginSettingTab, Setting  } from 'obsidian';
 import TablesPlusPlugin from './main';
 
-//Settings for the plugin
 export class TablesPlusSettingTab extends PluginSettingTab {
 	plugin: TablesPlusPlugin;
 
@@ -13,6 +12,6 @@ export class TablesPlusSettingTab extends PluginSettingTab {
 	display(): void {
 		const {containerEl} = this;
 		containerEl.empty();
-
+		
 	}
 }
