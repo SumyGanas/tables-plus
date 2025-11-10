@@ -24,7 +24,7 @@ export default class TablesPlusPlugin extends Plugin {
     let selectedElement: HTMLElement | null | undefined
     
     if (view) {
-        this.addRibbonIcon('dice', 'Tables Plus', (evt: MouseEvent) => { 
+        this.addRibbonIcon('sheet', 'Tables plus', () => { 
                     if (view.editor.somethingSelected()) {
                         const selection = document.getSelection()
                         if (selection && selection.rangeCount > 0) {
