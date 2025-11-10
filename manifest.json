@@ -6,6 +6,5 @@
 	"description": "Enhance your tables with auto-indexing, currency formatting, and dropdown menus.",
 	"author": "Sumy Ganas",
 	"fundingUrl": "https://ko-fi.com/sgan73",
-	"isDesktopOnly": true,
-	"repo": "SumyGanas/tables-plus"
+	"isDesktopOnly": true
 }
