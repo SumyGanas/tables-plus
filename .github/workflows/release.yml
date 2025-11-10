@@ -23,12 +23,6 @@ jobs:
           npm install
           npm run build
 
-      - name: Check for files
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Listing all files..."
-          ls -laR
-
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
