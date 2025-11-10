@@ -1,6 +1,5 @@
 import { Editor, parseYaml, stringifyYaml } from 'obsidian'
 import { EditorView } from '@codemirror/view';
-import { TableConfig } from 'lucide-react';
 import { setTableIdEffect } from '../state-effects/enumEffects';
 
 interface ColumnConfig {
@@ -8,20 +7,19 @@ interface ColumnConfig {
     type: string;
     options: string[];
   }
-interface TableConfig {
-tableId: string | null;
-columns: ColumnConfig[];
+    interface TableConfig {
+    tableId: string | null;
+    columns: Record<string, ColumnConfig>;
 }
 
 export async function saveSelectOptions(editor: Editor, tableStartLine: number, tableID: string, newOptions: string[], columnName: string): Promise<{ configBlock: string; }> {
     const lineAbove = tableStartLine - 1;
-    let newColumnConfig: ColumnConfig[] = []
     let newTableConfig: TableConfig = {
         tableId: tableID,
-        columns: newColumnConfig
+        columns: {}
       };
     let configStartLine: number | null = null;
-    let configEndLine = lineAbove - 1
+    let configEndLine = Math.max(0,lineAbove - 1)
 
     if (lineAbove >= 0 && editor.getLine(configEndLine).trim() === "```") { //old config exists
         configStartLine = lineAbove - 1;
@@ -39,12 +37,17 @@ export async function saveSelectOptions(editor: Editor, tableStartLine: number, 
             newTableConfig = parseYaml(configContent)
         }
 
-    }    
-    const updatedConfig = setTableConfig(newTableConfig ,['columns', columnName],{ 
+    }
+    let updatedConfig: any 
+    if (newOptions.length > 0)  {
+        updatedConfig = setTableConfig(newTableConfig ,['columns', columnName],{ 
         type: 'select', 
         options: newOptions 
     })
-
+    }  else {
+        updatedConfig = setTableConfig(newTableConfig)
+}
+    
     const newConfigContent = stringifyYaml(updatedConfig);
     const newConfigBlock = `\`\`\`table-config\n${newConfigContent}\`\`\`\n\n`;
 
@@ -63,10 +66,12 @@ export async function saveSelectOptions(editor: Editor, tableStartLine: number, 
     return {configBlock: newConfigBlock}
 }
 
-//updates the config object
-  function setTableConfig(obj: any, path: string[], value: any) {
+  function setTableConfig(obj: any, path?: string[], value?: any) {
     const newObj = { ...obj };
     let currentLevel = newObj;
+    if (!path || path.length === 0) {
+        return newObj;
+      }
   
     for (let i = 0; i < path.length - 1; i++) {
       const key = path[i];
@@ -88,11 +93,11 @@ function getTableConfig(editor: Editor): TableConfig {
         }
     }
     const lineAbove = line - 1;
-    let columnConfig: ColumnConfig[] = []
     let config: TableConfig = {
         tableId: null,
-        columns: columnConfig
+        columns: {},
       };
+    
     let configStartLine: number | null = null;
 
     if (lineAbove >= 0 && editor.getLine(configEndLine).trim() === "```") {
@@ -114,16 +119,15 @@ function getTableConfig(editor: Editor): TableConfig {
 
 export async function getTableEnumOptions(editor: Editor, columnName: string): Promise<string[]> {
     const config = getTableConfig(editor)
-    //@ts-ignore
-    const cfg = config.columns[columnName].options
-    return cfg   
+    const options = config.columns[columnName]?.options ?? [];
+    return options
 }
 
 //returns table id or creates and returns a new one if it doesn't exist
 export async function getTableId(editor: Editor): Promise<string> {
     const line = editor.getCursor().line
     const tableConfig = getTableConfig(editor)
-    //@ts-ignore
+
     const cfg = tableConfig.tableId
     // @ts-expect-error, not typed
     const editorView = editor.cm as EditorView;
