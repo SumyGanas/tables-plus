@@ -34,9 +34,7 @@ class PlaceholderWidget extends WidgetType {
                         const pos = view.posAtDOM(btn);
                         view.dispatch({
                             changes: { from: pos, to: pos+5, insert: menuItem },
-                        });
-                        
-                       
+                        });     
                 }));
             });
 
