@@ -13,24 +13,32 @@ import { TablesPlusSettingTab } from './settings';
 
 interface PluginSettings {
 	mySetting: string;
+    hideBlocks: boolean;
 }
 
 const DEFAULT_SETTINGS: PluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+    hideBlocks: false,
 }
 
 export default class TablesPlusPlugin extends Plugin {
     settings: PluginSettings;
+    styleEl: HTMLElement;
     async onload() {
+    await this.loadSettings()
+
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
     this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholders]);
     this.registerEditorExtension(markdown());
     this.registerMarkdownPostProcessor(
         createPlaceholderPostProcessor(this.app)
       );
-    console.log('loading plugin')
     
     let selectedElement: HTMLElement | null | undefined
+
+    this.styleEl = document.head.createEl("style", {
+        attr: { id: "tables-plus-styles" },
+      });
     
     if (view) {
         this.addRibbonIcon('dice', 'Tables Plus', (evt: MouseEvent) => { 
@@ -61,8 +69,6 @@ export default class TablesPlusPlugin extends Plugin {
                                     } 
                                 })
 
-                            } else {
-                                console.log("Error - No baby div found")
                             }
                         }
                     } else{
@@ -75,12 +81,11 @@ export default class TablesPlusPlugin extends Plugin {
 
 		this.addSettingTab(new TablesPlusSettingTab(this.app, this));
 
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+		this.registerInterval(window.setInterval(() => 5 * 60 * 1000));
 
     }
 
     async onunload() {
-    console.log('unloading plugin')
     }
 
     async loadSettings() {
