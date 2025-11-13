@@ -128,7 +128,7 @@ export class TypesModal extends Modal {
                             }
                             currencyDropdown.selectEl.setCssStyles(stylesToApply)
                             this.setTitle("Please enter a currency symbol.")
-                            const textbox = new TextComponent(this.contentEl).setPlaceholder("e.g., $")
+                            const textbox = new TextComponent(this.contentEl).setPlaceholder("E.g., $.")
                             const currencySymbol = textbox.inputEl
                             currencySymbol.addClass("tp-modal-input")
                             currencySet.add(currencySymbol)
