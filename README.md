@@ -10,7 +10,7 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
     - **Index:** Auto-indexes the columns 
     - **Money:** Formats any numbers as any currency. Also accepts user-defined currency symbols.
     - **Enum:** Pre-defined options for any table column, turning cells into a dropdown selector. Generally used for columns like "Status" or "Priority" where you want to ensure consistent data entry and prevent typos. 
-    📝 _Note: The selection change does not currently persist in reading view (will reset if the view is switched back) but works in live preview to persist beyond view changes._
+    📝 _Note: The selection change does not currently work in reading view but it works in live preview. Set the changes in live preview to see it in reading view._
 
 
 # Usage
@@ -23,7 +23,7 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
 3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to create a table-config code block and open a modal.
 <img src=".github/config.png" width="400" height="300" alt="modal">
 
-📝 _If you don't plan on using enums, you can delete this code block but I reccommend keeping it for future backward compatibility. It will show up again if you try to re-index or format any new rows_
+⚠️ _Please do not delete this block as it will delete all existing settings for your table. If you plan to edit the block directly for enum options, please make sure to follow the proper YAML syntax (no tabs)_
 
 **Modal Options**
 
