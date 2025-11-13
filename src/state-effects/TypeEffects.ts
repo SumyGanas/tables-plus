@@ -8,7 +8,8 @@ export const setIndexEffect = StateEffect.define<Record<string, number>>();
 
 const resetEffect = StateEffect.define();
 export const TypeEffectsField = StateField.define<Record<string, number> | null>({
-  create(state: EditorState) {
+  
+  create(state: EditorState) { // eslint-disable-line
     return null;
   },
 
