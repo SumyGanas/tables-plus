@@ -12,7 +12,7 @@ import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins
 
 export default class TablesPlusPlugin extends Plugin {
     async onload() {
-    await this.loadSettings()
+    //await this.loadSettings()
 
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
     this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholders]);
@@ -40,7 +40,9 @@ export default class TablesPlusPlugin extends Plugin {
                                     const tableObj = new Table(view.editor)
                                     const config = tableObj.getTableConf()
                                     if (config === null || config === undefined || config.tableId === null || config.tableId === undefined){
-                                        tableObj.newConfigBlock(view.editor.getCursor().line)
+                                        tableObj.newConfigBlock(view.editor.getCursor().line).catch((error: Error)=>{
+                                            new Notice(`There has been an error: ${error.name}.`)
+                                        })
                                     }                                    
                                     new TypesModal(this.app,view,tableObj,selectedtext,(type)=>{
                                         new Notice(`Selected: ${type}`)
@@ -66,17 +68,16 @@ export default class TablesPlusPlugin extends Plugin {
 
     }
 
-    async onunload() {
-        //unload function for future instance creation by a setting
-    }
+    // async onunload() {
+    // }
 
-    async loadSettings() {
-		//this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
+    // async loadSettings() {
+	// 	//this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	// }
 
-	async saveSettings() {
-		//await this.saveData(this.settings);
-	}
+	// async saveSettings() {
+	// 	//await this.saveData(this.settings);
+	// }
 }
 
 
