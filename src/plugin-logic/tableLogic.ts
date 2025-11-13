@@ -15,7 +15,7 @@ export function findIndex(headerRow: HTMLTableRowElement | null | undefined): nu
 
 function findCellInsertIndex(lineText: string, cellPre: number): {start: number; end: number} | null {
   const cell = parseInt(String(cellPre),10)
-  const pipeRegexp: RegExp = /[|]/g;
+  const pipeRegexp = /[|]/g;
   const pipes = Array.from(lineText.matchAll(pipeRegexp))
   const startPipeIndex = pipes[cell].index
   const endPipeIndex = pipes[cell+1].index
@@ -68,7 +68,6 @@ export function indexTable(view: EditorView, table: HTMLElement | null, cell: nu
 
 export function enumTable(view: EditorView, table: HTMLElement | null, cell: number): ChangeSpec[] | undefined {
   const changes: ChangeSpec[] = [];
-  let rowIndex = 1
   const tableStartPos = view.posAtDOM(table as Node);
   if (tableStartPos === null) return;
   const startLine: Line = view.state.doc.lineAt(tableStartPos);
@@ -94,7 +93,6 @@ export function enumTable(view: EditorView, table: HTMLElement | null, cell: num
       });
       }
     }
-    rowIndex++;
     currentLineNumber++;
   }
   return changes; 
@@ -106,7 +104,6 @@ export function moneyFormat(view: EditorView, table: HTMLElement | null, cell: n
     return
   }
   const changes: ChangeSpec[] = [];
-  let rowIndex = 1
   const tableStartPos = view.posAtDOM(table as Node);
   if (tableStartPos === null) return;
   const startLine: Line = view.state.doc.lineAt(tableStartPos);
@@ -161,15 +158,10 @@ export function moneyFormat(view: EditorView, table: HTMLElement | null, cell: n
             insert: `${symbol}`+" "+`${cellText.trimEnd()}.00`
           });
         }
-        
-      } else {
-
-      }
-      
     }
-    rowIndex++;
     currentLineNumber++;
   }
-  return changes;
+ 
 }
-
+ return changes;
+}
