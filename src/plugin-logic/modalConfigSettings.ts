@@ -57,7 +57,6 @@ export class Table {
 
     public async newConfigBlock(tableStartLine: number): Promise<{configBlock: string}>  {
         const tableId = crypto.randomUUID()
-        //const newConfigBlock = `\`\`\`table-config\ntableId: ${tableId}\n\n\`\`\`\n\n`;
         const s = stringifyYaml({ tableId:`${tableId}`, columns: ``})
         const newConfigBlock = `\`\`\`table-config\n`+s+`\`\`\`\n\n`
 
