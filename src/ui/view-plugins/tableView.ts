@@ -27,7 +27,7 @@ class TableViewPlugin implements PluginValue {
                                   const cellIndex = (indexElem?.getAttribute("cell-index") as unknown) as number
                                   const attributeKey = table.getAttribute("modified-header");
                                   const configs = this.view.state.field(tableConfigStateField)
-                                  const TableId = configs.get("tableId")
+                                  const TableId = configs.get("tableId") as string
                                   if (attributeKey === "Index") {
                                       changes = indexTable(this.view, table, cellIndex);
                                       if (changes) {
