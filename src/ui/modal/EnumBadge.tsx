@@ -8,7 +8,6 @@ interface Props {
   props: Set<string>;
 }
 export const Badges = ({props}:Props)=> {
-  
 
   const [visibleItems, setIsVisible] = useState<string[]>(Array.from(props));
   
