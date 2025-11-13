@@ -69,7 +69,6 @@ export class Table {
         return Promise.resolve({configBlock: newConfigBlock})
     }
 
-  //returns a column updated with the given new options
     setTableConfig(columnName: string, newOptions: string[]): Record<string, string[]>[]  {
         const oldConfig = this.getTableConf()
         let newColumns: TableConfig["columns"]

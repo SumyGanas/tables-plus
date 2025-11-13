@@ -33,7 +33,7 @@ class TableViewPlugin implements PluginValue {
                                       if (changes) {
                                         this.view.dispatch({
                                         changes: changes, 
-                                        effects: setIndexEffect.of({[TableId]: rows }) //Changed
+                                        effects: setIndexEffect.of({[TableId]: rows })
                                       });
                                   }
                                 } else if (attributeKey?.contains("Money")) {
@@ -43,16 +43,15 @@ class TableViewPlugin implements PluginValue {
                                     if (changes) {
                                       this.view.dispatch({
                                       changes: changes, 
-                                      effects: setIndexEffect.of({[TableId]: rows }) //Changed
+                                      effects: setIndexEffect.of({[TableId]: rows })
                                       });
                                     }
-                                    //adds text to the cells below which is picked up by different view plugin 
                                 } else if (attributeKey === "Enum") {
                                     changes = enumTable(this.view, table, cellIndex)
                                     if (changes) {
                                       this.view.dispatch({
                                       changes: changes, 
-                                      effects: [setEnumEffect.of({[TableId]: rows })] //Changed
+                                      effects: [setEnumEffect.of({[TableId]: rows })]
                                       });
                                     }
                                 }
