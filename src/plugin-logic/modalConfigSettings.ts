@@ -1,16 +1,9 @@
 import { Editor, parseYaml, stringifyYaml } from 'obsidian'
-//import { stringify } from 'yaml'
-// import { EditorView } from '@codemirror/view';
-// import { setTableIdEffect } from '../state-effects/enumEffects';
 
-
-//type Column = Record<string, string[]> //column name : options
-
-//type TableConfig = Record<string,Column[]> // table id : columns
 export interface TableConfig {
     tableId: string,
-    columns: Record<string, string[]>[] //columnName, options
-} //object is needed so the parseyaml function works
+    columns: Record<string, string[]>[]
+}
 
 export class Table {
     tableId: string
@@ -19,9 +12,8 @@ export class Table {
         this.editor = editor;
     }
   
-  //gets existing or empty -> so it can be passed to set 
     public getTableConf(): TableConfig {
-        const [configStartLine, configEndLine] = this.getStartAndEndLines(this.editor)
+        const [configStartLine, configEndLine] = this.getStartAndEndLines()
 
         const configContent = this.editor.getRange(
                 { line: configStartLine+1, ch: 0 },
@@ -35,25 +27,24 @@ export class Table {
     public async getTableEnumOptions(columnName: string): Promise<string[]> {
         const config = this.getTableConf()
         let vals: string[] = []
-        const columnRecords = config.columns;
         if(config.columns){
-            for (const [key, value] of Object.entries(columnRecords)) {
-            if (key === columnName) {
-                vals = value.options
+            const columnRecords = config.columns;
+            for (const [_, value] of Object.entries(columnRecords)) {
+            if (Object.entries(value)[0][0] === columnName) {
+                vals = value[columnName]
                 break
                 }
-        }}
-        
-        
-        if (vals != undefined) return vals
-        else return []
+            }
+        }
+        if (vals != undefined) return Promise.resolve(vals)
+        else return Promise.resolve([])
     }
 
     public async saveSelectOptions(newOptions: string[], columnName: string): Promise<{configBlock: string}>  {
         const newConfig = this.setTableConfig(columnName, newOptions)
         const newConfigContent = stringifyYaml(newConfig)
         const newConfigString = `columns:\n${newConfigContent}`;
-        const [startLine,endLine] = this.getStartAndEndLines(this.editor)
+        const [startLine,endLine] = this.getStartAndEndLines()
         {
             this.editor.replaceRange(
                 newConfigString,
@@ -61,7 +52,7 @@ export class Table {
                 {line: endLine,ch: 0}
             );
         }
-        return {configBlock: newConfigString}
+        return Promise.resolve({configBlock: newConfigString})
     }
 
     public async newConfigBlock(tableStartLine: number): Promise<{configBlock: string}>  {
@@ -76,7 +67,7 @@ export class Table {
                 { line: tableStartLine, ch: 0 }
             );
         }
-        return {configBlock: newConfigBlock}
+        return Promise.resolve({configBlock: newConfigBlock})
     }
 
   //returns a column updated with the given new options
@@ -98,18 +89,25 @@ export class Table {
         return newColumns
     }
 
-    getStartAndEndLines(editor: Editor): [number, number] {
-        const line = editor.getCursor().line
+    getStartAndEndLines(): [number, number] {
+        const line = this.editor.getCursor().line
         const lineAbove = line - 1
         
-        const configEndLine = Math.max(lineAbove-1,0) 
-
+        let configEndLine = Math.max(lineAbove-1,0) 
+        if (this.editor.getLine(configEndLine).trim() !== "```") {
+            for (let i = configEndLine; i >= 0; i--) {
+                if (this.editor.getLine(i).trim() === "```") {
+                    configEndLine = i
+                    break
+                }
+            }
+        }
         let configStartLine = Math.max(configEndLine-1,0) ;
             for (let i = configStartLine; i >= 0; i--) {
-                if (editor.getLine(i).trim() === "```table-config") {
+                if (this.editor.getLine(i).trim() === "```table-config") {
                     configStartLine = i;
                     break;
-                } else if (editor.getLine(i).charAt(0) === `|` && editor.getLine(i).at(-1) === `|`) {
+                } else if (this.editor.getLine(i).charAt(0) === `|` && this.editor.getLine(i).at(-1) === `|`) {
                     break
                 }
             }
