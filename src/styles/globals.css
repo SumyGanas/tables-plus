@@ -135,5 +135,37 @@ span[data-slot="badge"] {
   color: var(--text-on-accent);
   padding: 2px 6px;
   border-radius: 4px;
-  cursor: pointer; /* Important! */
+  cursor: pointer !important;
+}
+
+.tp-modal-button {
+  margin: 2px;
+  height: 30px;
+  width: 80px;
+}
+
+.tp-modal-button-currency {
+    margin-left: 5px;
+    box-sizing: content-box;
+    height: 30px;
+    width: 80px;
+    padding: 0px 6px;
+}
+
+.tp-modal-dropdown-currency{
+  margin-right: 5px; 
+}
+
+.tp-modal-content {
+  display: flex;
+  align-items: center;
+}
+
+.tp-modal-input {
+    flex-grow: 1;
+}
+
+.tp-modal-config-setting{
+  flex-grow: 1;
+
 }

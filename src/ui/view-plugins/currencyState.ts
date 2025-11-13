@@ -10,7 +10,7 @@ export const currencyField = StateField.define<Set<string>>({
     update(val: Set<string>, transaction: Transaction): Set<string> {
       let newState = val;
   
-      for (let effect of transaction.effects) {
+      for (const effect of transaction.effects) {
         if (effect.is(currencyEffects)) {
           newState = effect.value;
         }
@@ -31,13 +31,13 @@ currencies.forEach((c)=>{
 })
 
 export const currencyTypes: Record<string, string> = {
-    "-":"",
-    "Add your own":"Add your own",
+    "-":"None",
     "$":"$",
     "€":"€",
     "£":"£",
     "¥":"¥",
     "₩":"₩",
     "₹":"₹",
-    "₱":"₱"
+    "₱":"₱",
+    "Add your own":"Add your own"
 }
