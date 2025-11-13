@@ -11,7 +11,7 @@ class TableViewPlugin implements PluginValue {
         this.view = view
     }
   
-    update(update: ViewUpdate) {
+    update(update: ViewUpdate) { // eslint-disable-line
         this.view.requestMeasure({
             read: () => {
                 return this.view.dom.querySelectorAll('[modified-header]'); 
@@ -68,12 +68,6 @@ class TableViewPlugin implements PluginValue {
           });
         
          
-    }
-
-
-  
-    destroy() {
-
     }
 
   }
