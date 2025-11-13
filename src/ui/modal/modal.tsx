@@ -1,10 +1,11 @@
-import { App, Modal, DropdownComponent, TextComponent, ButtonComponent, Setting, MarkdownView} from 'obsidian'
+import { App, Modal, DropdownComponent, TextComponent, ButtonComponent, Setting, MarkdownView, Notice} from 'obsidian'
 import { currencies, currencyTypes } from '../view-plugins/currencyState';
 import { Badges } from './EnumBadge';
 import { Root, createRoot } from 'react-dom/client';
 import { StrictMode } from 'react';
-import { saveSelectOptions, getTableEnumOptions } from '@/src/plugin-logic/modalConfigSettings';
+import { Table } from '@/src/plugin-logic/modalConfigSettings';
 import { upsertTableConfigEffect, TableConfigPayload } from '@/src/state-effects/enumEffects';
+
 
 
 const ALL_TYPES: Record<string, string> = {
@@ -17,31 +18,32 @@ const ALL_TYPES: Record<string, string> = {
 
 export class TypesModal extends Modal {
     root: Root | null = null;
-    constructor(app: App, view: MarkdownView | null, tableID: string, selection: string, onSelect:(result: string) => void) {
+    constructor(app: App, view: MarkdownView | null, table: Table, selection: string, onSelect:(result: string) => void) {
         super(app);
-        let enumType: string
         const editor = view?.editor
         const line = editor?.getCursor().line
-        
-        const typeSetting = new Setting(this.contentEl).setName('Tables Plus').setDesc('Please select a type for your table column').addDropdown(dropdown=> {
+        this.contentEl.addClass("tp-modal-content")
+        const typeSetting = new Setting(this.contentEl).setName('Tables plus').setDesc('Please select a type for your table column.').addDropdown(dropdown=> {
             dropdown.addOptions(ALL_TYPES).onChange((val)=>{
                 if (val === "Enum") {
                     onSelect(val)
                     const ENUM_TYPES = new Set<string>()
                     if (editor && line) {
-                        const enumTypes = getTableEnumOptions(editor,selection)
-                       let et: string[]
-                        enumTypes.then((enumvals)=>{
-                            enumvals?.forEach((e)=>{
+                        const enums = table.getTableEnumOptions(selection)
+                        enums.then((enumvals)=>{
+                            if (enumvals.length)
+                            enumvals.forEach((e)=>{
                                 ENUM_TYPES.add(e)
                             })
-                        }).catch()
+                        }).catch(()=>{
+                            new Notice(`There's been an issue. Please try again.`)
+                        })
                     }
                     const spanEl = this.modalEl.createEl("span")
                     spanEl.id = "modal-enum-badge-element"
                     if (!this.root) {
                         const container = document.getElementById("modal-enum-badge-element");
-                        this.root = createRoot(container!)
+                        if (container) this.root = createRoot(container)
                       } 
                       this.root?.render(
                         <StrictMode>
@@ -50,8 +52,11 @@ export class TypesModal extends Modal {
                     );
                     this.setTitle("Configure your options")
                     typeSetting.settingEl.remove()
-                    const text = new TextComponent(this.contentEl).setPlaceholder("Enum Name").inputEl
-                    const btn = new ButtonComponent(this.contentEl).setButtonText("Add Enum")
+                    const text = new TextComponent(this.contentEl).setPlaceholder("Enum name").inputEl
+                    text.addClass("tp-modal-input")
+                    const btn = new ButtonComponent(this.contentEl).setButtonText("Add enum")
+                    btn.setClass("tp-modal-button")
+                    
                     btn.onClick(()=>{
                         if (text.value.length > 0){
                             ENUM_TYPES.add(text.value)
@@ -77,38 +82,58 @@ export class TypesModal extends Modal {
                     })
 
                     const submitbtn = new ButtonComponent(this.contentEl).setButtonText("Submit").setCta()
+                    submitbtn.setClass("tp-modal-button")
                     submitbtn.onClick(()=>{
                         if (Array.from(ENUM_TYPES).length >= 0){
-                        
                         const columnOptions = Array.from(ENUM_TYPES)
                         if (editor && line) {
                             // @ts-expect-error, not typed
                             const editorView = view.editor.cm as EditorView;
-                            const config = saveSelectOptions(editor, line, tableID, columnOptions, selection)
-                            const myConfig: TableConfigPayload = {
-                                key: tableID,
-                                columnName: selection,
-                                tableConfig: config
-                            }
-                            editorView.dispatch({
-                                effects: [upsertTableConfigEffect.of(myConfig)]
-                            })   
+                            const config = table.saveSelectOptions(columnOptions, selection)
+                            config.then((cfg)=>{
+                                const myConfig: TableConfigPayload = {
+                                            key: table.tableId,
+                                            columnName: selection,
+                                            tableConfig: cfg
+                                        }
+                                editorView.dispatch({
+                                    effects: [upsertTableConfigEffect.of(myConfig)]
+                                }) 
+                            }).catch((error: Error)=>{
+                                if (error.name === "TypeError") {
+                                    return 
+                                }
+                            })
+                              
                         }
                         this.close()
                     }
                     });
  
                 } else if(val === "Money") {
-                    this.setTitle("Please select a currency (or add your own)")
+                    this.setTitle("Please select a currency (or add your own).")
                     const currencySet = new Set();
                     currencySet.add(currencies)
                     typeSetting.settingEl.remove()
-                        new DropdownComponent(this.contentEl).addOptions(currencyTypes).onChange((val)=> {
+                        const currencyDropdown = new DropdownComponent(this.contentEl).addOptions(currencyTypes)
+                        currencyDropdown.selectEl.addClass("tp-modal-dropdown-currency")
+                        currencyDropdown.onChange((val)=> {
                         if (val == "Add your own") {
-                            this.setTitle("Please enter a single character")
-                            const currencySymbol = new TextComponent(this.contentEl).setPlaceholder("Currency Symbol - 1 character").inputEl
+                            currencyDropdown.selectEl.disabled = true
+                            const stylesToApply = {
+                                color: 'lightgrey', 
+                                borderColor: 'rgba(118, 118, 118, 0.3);',
+                                opacity: '0.7',
+                                cursor: 'not-allowed'
+                            }
+                            currencyDropdown.selectEl.setCssStyles(stylesToApply)
+                            this.setTitle("Please enter a currency symbol.")
+                            const textbox = new TextComponent(this.contentEl).setPlaceholder("e.g., $")
+                            const currencySymbol = textbox.inputEl
+                            currencySymbol.addClass("tp-modal-input")
                             currencySet.add(currencySymbol)
-                            const btn  = new ButtonComponent(this.contentEl).setButtonText("Use Currency").onClick(()=>{
+                            const btn  = new ButtonComponent(this.contentEl).setButtonText("Use currency").setClass("tp-modal-button-currency")
+                            btn.onClick(()=>{
                                 if (!btn.disabled){
                                 currencyTypes[currencySymbol.value] = currencySymbol.value
                                 onSelect("Money-"+currencySymbol.value)
@@ -119,9 +144,11 @@ export class TypesModal extends Modal {
                             currencySymbol.addEventListener("keyup",()=>{
                                     if (currencySymbol.value.length === 1) {
                                         btn.setCta()
+                                        btn.setTooltip("")
                                         btn.setDisabled(false)
                                 } else {
                                     btn.setDisabled(true)
+                                    btn.setTooltip("Please enter a single character!")
                                     btn.removeCta()
                                 }
                             })
@@ -138,6 +165,8 @@ export class TypesModal extends Modal {
                 
         });
     });
+
+    typeSetting.setClass("tp-modal-config-setting")
             
             
     }
