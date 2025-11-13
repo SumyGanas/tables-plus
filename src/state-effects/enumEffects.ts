@@ -3,19 +3,18 @@ import { StateEffect, StateField } from "@codemirror/state"
 export interface TableConfigPayload {
   key: string;
   columnName: string;
-  tableConfig: any;
+  tableConfig: unknown;
 }
 export const setEnumListEffect = StateEffect.define<string[]>();
 export const upsertTableConfigEffect = StateEffect.define<TableConfigPayload>();
 export const removeTableConfigEffect = StateEffect.define<string>();
 export const setTableIdEffect = StateEffect.define<string>();
 
-type ConfigMap = Map<string, any>;
+type ConfigMap = Map<string, unknown>;
 
 export const tableConfigStateField = StateField.define<ConfigMap>({
   create() {
-    const initMap = new Map<string, any>();
-    return new Map<string, any>();
+    return new Map<string, unknown>();
   },
 
   update(oldValue, tr) {
@@ -23,9 +22,9 @@ export const tableConfigStateField = StateField.define<ConfigMap>({
       return oldValue;
     }
 
-    let newValue = new Map(oldValue);
+    const newValue = new Map(oldValue);
 
-    for (let effect of tr.effects) {
+    for (const effect of tr.effects) {
       if (effect.is(upsertTableConfigEffect)) {
         newValue.set(effect.value.key, effect.value.tableConfig);
       }
