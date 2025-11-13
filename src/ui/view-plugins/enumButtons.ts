@@ -4,7 +4,6 @@ import { Menu, MarkdownView, MarkdownPostProcessor, App, Notice } from 'obsidian
 import { Table } from '@/src/plugin-logic/modalConfigSettings';
 import { editorInfoField } from 'obsidian';
 
-//Widget that styles the given element 
 class PlaceholderWidget extends WidgetType {
     toDOM(view: EditorView): HTMLElement {
     const markdownView = view.state.field(editorInfoField)
