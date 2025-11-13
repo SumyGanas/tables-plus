@@ -8,7 +8,28 @@ export default defineConfig(
     tseslint.configs.strict,
     tseslint.configs.stylistic,
     {
-        ignores: ["**/temp.js", "config/*", "node_modules/*","main.js",".git/"],
+    ignores: ["**/temp.js", 
+        "config/*", 
+        "node_modules/",
+        "main.js",
+        "components/*",
+        "lib/*",
+        ".*/*",
+        "*.json",
+        ".config.*"]
+  },
+    {
+        rules: {
+                "@typescript-eslint/no-unused-vars": [
+                    "error",
+                    {
+                    "argsIgnorePattern": "^_|^state$|^ctx$",
+                    "varsIgnorePattern": "^_",
+                    "caughtErrorsIgnorePattern": "^_"
+                    }
+                ]
+        }
     },
-  );
+    
+);
 
