@@ -7,7 +7,7 @@ import { findIndex } from '@/src/plugin-logic/tableLogic';
 import { currencyField } from './ui/view-plugins/currencyState';
 import { tableConfigStateField } from './state-effects/enumEffects';
 import { Table } from './plugin-logic/modalConfigSettings';
-import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins/enumButtons';
+//import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins/enumButtons';
 
 
 export default class TablesPlusPlugin extends Plugin {
@@ -15,11 +15,11 @@ export default class TablesPlusPlugin extends Plugin {
     await this.loadSettings()
 
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-    this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholders]);
+    this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField]);
     this.registerEditorExtension(markdown());
-    this.registerMarkdownPostProcessor(
-        createPlaceholderPostProcessor(this.app)
-      );
+    // this.registerMarkdownPostProcessor(
+    //     createPlaceholderPostProcessor(this.app)
+    //   );
     
     let selectedElement: HTMLElement | null | undefined
     

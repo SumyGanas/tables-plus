@@ -1,4 +1,4 @@
-import { App, PluginSettingTab  } from 'obsidian';
+import { App, PluginSettingTab, Setting  } from 'obsidian';
 import TablesPlusPlugin from './main';
 
 
@@ -6,7 +6,7 @@ interface PluginSettings {
 	mySetting: string;
 }
 
-export const DEFAULT_SETTINGS: PluginSettings = {
+const DEFAULT_SETTINGS: PluginSettings = {
 	mySetting: 'default',
 }
 
