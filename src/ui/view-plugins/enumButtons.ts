@@ -72,31 +72,6 @@ export const createPlaceholderPostProcessor = (app: App): MarkdownPostProcessor 
                 btn.onClickEvent(() => {
                    new Notice("Please set cell content in live preview.")
                 //TODO: Fix logic to obtain pre-rendered data 
-                // const headerName = findButtonHeader(btn);
-                // const editor = view.editor;
-                // const btnLine = ctx.getSectionInfo(element)?.lineStart;
-                // let menuItems: string[] | undefined = []
-                // if (headerName && editor && btnLine) {
-                //     const table = new Table(editor)
-                //     const enumOptions = table.getTableEnumOptions(headerName)
-                //     enumOptions.then((menuitems)=>{
-                //         menuItems = menuitems
-                //         if (menuItems.length) {
-                //             const menu = new Menu()
-                //             menuItems.forEach((menuItem)=>{
-                //                 menu.addItem((item) =>
-                //                     item.setTitle(menuItem).onClick(() => {
-                //                         cell.empty()
-                //                         cell.setText(menuItem)
-                //                     })
-                //                 );
-                //             })
-                //             menu.showAtMouseEvent(ev)
-                //         }
-                //     }).catch(()=>{
-                //         new Notice(`Please check your table-config!\nNote: Reading view maybe buggy so consider editing this cell in live preview.`)
-                //     })
-                // }
                 });
             }
             });
