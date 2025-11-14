@@ -34,7 +34,7 @@ class PlaceholderWidget extends WidgetType {
             }
         }).catch((reason: Error)=>{
             if (reason.name === "YAMLParseError") {
-                new Notice(`Your table-config format is incorrect!\nNote: Tabs are not allowed, use spaces.`)
+                new Notice(`Your table-config format is incorrect! Note: tabs are not allowed, use spaces.`)
             }
         });
         }
