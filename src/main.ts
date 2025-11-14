@@ -12,8 +12,6 @@ import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins
 
 export default class TablesPlusPlugin extends Plugin {
     onload() {
-    //await this.loadSettings()
-
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
     this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholders]);
     this.registerEditorExtension(markdown());
@@ -34,7 +32,6 @@ export default class TablesPlusPlugin extends Plugin {
                             if(babyDiv) {
                                 selectedElement = babyDiv.closest('th')
                                 const selectedtext = selection.toString()
-                                //const TableID = getTableId(view.editor)
                                 const table = babyDiv.closest("table")
                                 if (table){
                                     const tableObj = new Table(view.editor)
@@ -62,22 +59,9 @@ export default class TablesPlusPlugin extends Plugin {
 
     }
 
-		//this.addSettingTab(new TablesPlusSettingTab(this.app, this));
-
 		this.registerInterval(window.setInterval(() => 5 * 60 * 1000));
 
     }
-
-    // async onunload() {
-    // }
-
-    // async loadSettings() {
-	// 	//this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	// }
-
-	// async saveSettings() {
-	// 	//await this.saveData(this.settings);
-	// }
 }
 
 
