@@ -11,7 +11,7 @@ import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins
 
 
 export default class TablesPlusPlugin extends Plugin {
-    async onload() {
+    onload() {
     //await this.loadSettings()
 
     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
