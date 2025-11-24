@@ -1,6 +1,7 @@
 import esbuild from "esbuild";
 import process from "process";
 import builtins from "builtin-modules";
+import { syncAssets } from "./esbuild-sync.mjs";
 
 const banner =
 `/*
@@ -10,6 +11,7 @@ if you want to view the source, please visit the github repository of this plugi
 `;
 
 const prod = (process.argv[2] === "production");
+const targetDir = "/workspace/vault/.obsidian/plugins/tables-plus";
 
 const context = await esbuild.context({
 	banner: {
@@ -37,8 +39,11 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
-	outfile: "main.js",
+	outfile: `${targetDir}/main.js`,
 	minify: prod,
+	plugins: [
+		syncAssets(targetDir)
+	]
 });
 
 if (prod) {
