@@ -58,8 +58,8 @@ export class Table {
     public async newConfigBlock(tableStartLine: number): Promise<{configBlock: string}>  {
         const tableId = crypto.randomUUID()
         const s = stringifyYaml({ tableId:`${tableId}`, columns: ``})
-        const newConfigBlock = `\`\`\`table-config\n`+s+`\`\`\`\n\n`
-
+        const newConfigBlock = `\`\`\`tables-plus-config\n`+s+`\`\`\`\n\n`
+ 
         {
             this.editor.replaceRange(
                 newConfigBlock,
@@ -102,7 +102,7 @@ export class Table {
         }
         let configStartLine = Math.max(configEndLine-1,0) ;
             for (let i = configStartLine; i >= 0; i--) {
-                if (this.editor.getLine(i).trim() === "```table-config") {
+                if (this.editor.getLine(i).trim() === "```tables-plus-config") {
                     configStartLine = i;
                     break;
                 } else if (this.editor.getLine(i).charAt(0) === `|` && this.editor.getLine(i).at(-1) === `|`) {
