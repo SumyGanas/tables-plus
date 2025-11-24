@@ -1,0 +1,23 @@
+{
+  "name": "Obsidian Plugin Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+	"ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  },
+  "mounts": [
+    "source=//Users/sumy/Desktop/obsidian-plugin,target=/workspace/vault,type=bind"
+  ],
+  "postCreateCommand": "npm install && npm run build"
+}
