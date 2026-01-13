@@ -5,12 +5,14 @@ This plugin creates a ribbon-button that pops open a modal when the user highlig
 
 📝 _Note: Currently, the type setting needs to be re-done to auto-populate any newly added rows but this will not erase any of your pre-existing data. I will add setting persistance to new rows in the future. I reccommend keeping the table-config because the plugin will most likely use this to create persistance._
 
-#### Feature 1: Auto-categorizing columns: Table headings can be defined as types 
-- Current Types
-    - **Index:** Auto-indexes the columns 
-    - **Money:** Formats any numbers as any currency. Also accepts user-defined currency symbols.
-    - **Enum:** Pre-defined options for any table column, turning cells into a dropdown selector. Generally used for columns like "Status" or "Priority" where you want to ensure consistent data entry and prevent typos. 
-    📝 _Note: The selection change does not currently work in reading view but it works in live preview. Set the changes in live preview to see it in reading view._
+#### Features: Column Data Types
+Table headings can be defined as specific types to enforce formatting:
+
+- Index: Automatically indexes the column rows.
+- Money: Formats numbers as currency. Supports user-defined currency symbols.
+- Enum: Converts cells into dropdown selectors with pre-defined options. This ensures data consistency for columns like "Status" or "Priority."
+
+📝 _Note: Dropdown selection currently functions only in Live Preview. Changes made there will be visible, but not interactive, in Reading View._
 
 
 # Usage
