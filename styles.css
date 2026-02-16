@@ -98,7 +98,6 @@
   }
   img, svg, video, canvas, audio, iframe, embed, object {
     display: block;
-    vertical-align: middle;
   }
   img, video {
     max-width: 100%;
@@ -941,4 +940,10 @@ span[data-slot="badge"] {
       --tw-exit-translate-y: 0;
     }
   }
+}
+
+/* Hide tables-plus-config code blocks in reading view */
+.markdown-preview-view pre code.language-tables-plus-config,
+.markdown-preview-view code[class*="language-tables-plus-config"] {
+  display: none !important;
 }
