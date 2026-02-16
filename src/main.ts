@@ -12,7 +12,6 @@ import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins
 
 export default class TablesPlusPlugin extends Plugin {
     onload() {
-    const view = this.app.workspace.getActiveViewOfType(MarkdownView);
     this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholders]);
     this.registerEditorExtension(markdown());
     this.registerMarkdownPostProcessor(
@@ -21,8 +20,9 @@ export default class TablesPlusPlugin extends Plugin {
     
     let selectedElement: HTMLElement | null | undefined
     
-    if (view) {
-        this.addRibbonIcon('sheet', 'Tables plus', () => { 
+    this.addRibbonIcon('sheet', 'Tables plus', () => {
+        const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+        if (view) {
                     if (view.editor.somethingSelected()) {
                         const selection = document.getSelection()
                         if (selection && selection.rangeCount > 0) {
@@ -54,14 +54,11 @@ export default class TablesPlusPlugin extends Plugin {
                     } else{
                         new Notice("Please select a table header cell!",700)
                     }
+                }
                     
-                });
-
-    }
-
-		this.registerInterval(window.setInterval(() => 5 * 60 * 1000));
-
-    }
+            });
+                this.registerInterval(window.setInterval(() => 5 * 60 * 1000));
+        }
 }
 
 
