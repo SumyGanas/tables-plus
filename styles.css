@@ -947,3 +947,16 @@ span[data-slot="badge"] {
 .markdown-preview-view code[class*="language-tables-plus-config"] {
   display: none !important;
 }
+
+.confirmation-modal-subcontent {
+  display: block;
+}
+
+.confirmation-modal-subcontent  .setting-item-name {
+  font-size: small;
+
+}
+
+.confirmation-modal-subcontent .mod-toggle {
+  padding: 8px;
+}
