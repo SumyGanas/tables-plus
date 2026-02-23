@@ -3,7 +3,7 @@
 # Overview
 This plugin creates a ribbon-button that pops open a modal when the user highlights the header text in a table cell. This modal can be used to set the column types.
 
-📝 _Note: Currently, the type setting needs to be re-done to auto-populate any newly added rows but this will not erase any of your pre-existing data. I will add setting persistance to new rows in the future. I reccommend keeping the table-config because the plugin will most likely use this to create persistance._
+📝 _Note: Currently, the type setting needs to be re-done to auto-populate any newly added rows. I will add setting persistance to new rows in the future if obsidian or code-mirror make it possible._
 
 #### Features: Column Data Types
 Table headings can be defined as specific types to enforce formatting:
@@ -11,9 +11,7 @@ Table headings can be defined as specific types to enforce formatting:
 - Index: Automatically indexes the column rows.
 - Money: Formats numbers as currency. Supports user-defined currency symbols.
 - Enum: Converts cells into dropdown selectors with pre-defined options. This ensures data consistency for columns like "Status" or "Priority."
-
 📝 _Note: Dropdown selection currently functions only in Live Preview. Changes made there will be visible, but not interactive, in Reading View._
-
 
 # Usage
 1. Create a table and fill in the headers
