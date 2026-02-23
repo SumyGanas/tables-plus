@@ -1,7 +1,4 @@
-import { Badge } from "@/components/ui/badge"
-import { CircleX } from "lucide-react"
 import { useState, useEffect } from "react";
-
 
 
 interface Props {
@@ -26,10 +23,10 @@ export const Badges = ({props}:Props)=> {
     return (
           <>
           {visibleItems.map(enumType => (
-          <Badge key={enumType} variant="secondary" > 
-          {enumType}
-          <div onClick={()=>handleDelete(enumType)} id="delete-enum-div" ><CircleX id="delete-enum-svg" color="red" size={12}/></div>
-          </Badge>
+          <span key={enumType} className="tp-badge"> 
+            <span>{enumType}</span>
+            <span onClick={()=>handleDelete(enumType)} className="tp-badge-delete">&#9447;</span>
+          </span>
           ))}
           </>
   );
