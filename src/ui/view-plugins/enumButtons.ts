@@ -15,7 +15,9 @@ class PlaceholderWidget extends WidgetType {
         const headerName = findButtonHeader(btn)
         const editor = markdownView.editor
         if (headerName && editor){
-        const table = new Table(editor)
+        const cell = btn.closest('td');
+        const tableElement = cell?.closest('table') as HTMLElement | null;
+        const table = new Table(editor, tableElement)
         const enumOptions = table.getTableEnumOptions(headerName)
         enumOptions.then((menuitems)=>{
             if (menuitems.length) { 
@@ -31,9 +33,11 @@ class PlaceholderWidget extends WidgetType {
             });
 
             menu.showAtMouseEvent(ev)
+            } else {
+                new Notice('No enum options found for column: ' + headerName);
             }
-        }).catch((reason: Error)=>{
-            if (reason.name === "YAMLParseError") {
+        }).catch((e: Error)=>{
+            if (e.name === "YAMLParseError") {
                 new Notice(`Your tables-plus-config format is incorrect! Note: tabs are not allowed, use spaces.`)
             }
         });
