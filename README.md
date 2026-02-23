@@ -20,27 +20,21 @@ Table headings can be defined as specific types to enforce formatting:
 <img src=".github/Note.png" width="400" height="300" alt="create a table">
 
 2. Highlight the text inside the table header
-<img src=".github/Highlight.png" width="300" height="200" alt="highlight text">
-
-3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to create a table-config code block and open a modal.
-<img src=".github/config.png" width="400" height="300" alt="modal">
-
-⚠️ _Please do not delete this block as it will delete all existing settings for your table. If you plan to edit the block directly for enum options, please make sure to follow the proper YAML syntax (no tabs)_
+3. While the text is highlighted, click on the tables plus icon on your ribbon actions toolbar to open a modal
+4. Select your option
 
 **Modal Options**
 
-<img src=".github/Modal.png" width="400" height="300" alt="modal">
-
 - Indexing: Select index and click outside the table for the plugin to auto-populate your index column
-<img src=".github/indexed.png" width="400" height="300" alt="table config block">
+<img src=".github/Indexing.gif" width="300" height="200" alt="Index">
 
 - Money: Select a currency or add your own. Click outside the table for currency formatting. This will only work in cells that have numbers.
-
+<img src=".github/Money-format.gif" width="300" height="200" alt="Money">
 
 - Enums: Once you add the enums, the options field in the code-block will be auto-updated with your entered enum. You can edit your enums via this code block or through the modal. The edit icon will turn into a button once you're inside the table cell. This button will turn into a dropdown menu that can be used to easily select any option.
-<img src=".github/optionConfig.png" width="400" height="300" alt="option config">
-<img src=".github/dropdown.png" width="400" height="300" alt="dropdown">
+<img src=".github/Enum-format.gif" width="300" height="200" alt="Enum">
 
+⚠️ _Please do not delete this block as it will delete all enum settings for your table. If you plan to edit the block directly for enum options, please make sure to follow the proper YAML syntax (no tabs)_
 
 ## Additional features I may add in the future:
 - More Types (Dates etc.)
