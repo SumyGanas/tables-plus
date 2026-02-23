@@ -1,7 +1,7 @@
 {
 	"id": "tables-plus",
 	"name": "Tables Plus",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Enhance your tables with auto-indexing, currency formatting, and dropdown menus.",
 	"author": "Sumy Ganas",
