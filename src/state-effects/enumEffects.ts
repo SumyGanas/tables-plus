@@ -1,20 +1,25 @@
 import { StateEffect, StateField } from "@codemirror/state"
 
 export interface TableConfigPayload {
-  key: string;
+  position: number; 
   columnName: string;
-  tableConfig: unknown;
+  tableConfig: {
+    tableId: string;
+    columns: unknown;
+  };
 }
 export const setEnumListEffect = StateEffect.define<string[]>();
 export const upsertTableConfigEffect = StateEffect.define<TableConfigPayload>();
-export const removeTableConfigEffect = StateEffect.define<string>();
-export const setTableIdEffect = StateEffect.define<string>();
+export const removeTableConfigEffect = StateEffect.define<number>(); 
 
-type ConfigMap = Map<string, unknown>;
+type ConfigMap = Map<number, {
+  tableId: string;
+  columns: unknown;
+}>;
 
 export const tableConfigStateField = StateField.define<ConfigMap>({
   create() {
-    return new Map<string, unknown>();
+    return new Map<number, { tableId: string; columns: unknown }>();
   },
 
   update(oldValue, tr) {
@@ -26,11 +31,11 @@ export const tableConfigStateField = StateField.define<ConfigMap>({
 
     for (const effect of tr.effects) {
       if (effect.is(upsertTableConfigEffect)) {
-        newValue.set(effect.value.key, effect.value.tableConfig);
+        newValue.set(effect.value.position, effect.value.tableConfig);
       }
 
-      if (effect.is(setTableIdEffect)) {
-        newValue.set("tableId",effect.value)
+      if (effect.is(removeTableConfigEffect)) {
+        newValue.delete(effect.value);
       }
     }
     return newValue;

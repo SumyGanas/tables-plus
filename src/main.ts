@@ -8,9 +8,12 @@ import { currencyField } from './ui/view-plugins/currencyState';
 import { tableConfigStateField } from './state-effects/enumEffects';
 import { Table } from './plugin-logic/modalConfigSettings';
 import {  placeholders, createPlaceholderPostProcessor } from './ui/view-plugins/enumButtons';
+import { EditorView } from '@codemirror/view';
 
 
 export default class TablesPlusPlugin extends Plugin {
+    skipEnumClearConfirmationThisSession = false;
+
     onload() {
     this.registerEditorExtension([tableViewPlugin, TypeEffectsField, currencyField, tableConfigStateField, placeholders]);
     this.registerEditorExtension(markdown());
@@ -30,24 +33,29 @@ export default class TablesPlusPlugin extends Plugin {
                             const selectionContainer = range.commonAncestorContainer;
                             const babyDiv = selectionContainer.nodeType === Node.TEXT_NODE ? selectionContainer.parentElement : selectionContainer as HTMLElement;
                             if(babyDiv) {
-                                selectedElement = babyDiv.closest('th')
-                                const selectedtext = selection.toString()
+                                selectedElement = babyDiv.closest('th') as HTMLElement | null
+                                const headerName = selectedElement?.innerText?.trim() || ''
                                 const table = babyDiv.closest("table")
                                 if (table){
-                                    const tableObj = new Table(view.editor)
-                                    const config = tableObj.getTableConf()
-                                    if (config === null || config === undefined || config.tableId === null || config.tableId === undefined){
-                                        tableObj.newConfigBlock(view.editor.getCursor().line).catch((error: Error)=>{
-                                            new Notice(`There has been an error: ${error.name}.`)
-                                        })
-                                    }                                    
-                                    new TypesModal(this.app,view,tableObj,selectedtext,(type)=>{
+                                    const tableObj = new Table(view.editor, table as HTMLElement)
+                                    tableObj.getTableConfig().then(()=>{                                 
+                                    new TypesModal(this.app,view,tableObj,headerName,(type)=>{
                                         new Notice(`Selected: ${type}`)
                                         selectedElement?.setAttribute("modified-header", `${type}`);
                                         const headerRow = selectedElement?.closest("tr")
                                         const cellIndex = findIndex(headerRow)
                                         selectedElement?.setAttribute("cell-index", `${cellIndex}`);
-                                        }).open()
+                                        
+                                        // @ts-expect-error, not typed
+                                        const editorView = view.editor.cm as EditorView;
+                                        if (editorView) {
+                                            editorView.dispatch({
+                                                effects: EditorView.scrollIntoView(0)
+                                            });
+                                        }
+                                        }, this).open()
+                                    })
+
                                 }
                             }
                         }
