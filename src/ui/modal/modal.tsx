@@ -225,7 +225,6 @@ export class TypesModal extends Modal {
                             position: updatedConfig.position || 0,
                             columnName: selection,
                             tableConfig: {
-                                tableId: updatedConfig.TableConfig?.tableId || "",
                                 columns: updatedConfig.TableConfig?.columns || []
                             }
                         }

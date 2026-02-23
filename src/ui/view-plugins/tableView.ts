@@ -3,7 +3,7 @@ import { ChangeSpec } from "@codemirror/state"
 import { setEnumEffect, setIndexEffect } from "@/src/state-effects/TypeEffects";
 import { enumTable, indexTable, moneyFormat } from "@/src/plugin-logic/tableLogic";
 import { addCurrencies, currencySet } from "./currencyState";
-import { tableConfigStateField, upsertTableConfigEffect } from "@/src/state-effects/enumEffects";
+import { upsertTableConfigEffect } from "@/src/state-effects/enumEffects";
 import { parseYaml } from "obsidian";
 
 
@@ -69,13 +69,12 @@ class TableViewPlugin implements PluginValue {
 
                 try {
                     const config = parseYaml(configContent);
-                    if (config && config.tableId) {
+                    if (config && config.columns) {
                         this.view.dispatch({
                             effects: upsertTableConfigEffect.of({
                                 position: position,
                                 columnName: '',
                                 tableConfig: {
-                                    tableId: config.tableId,
                                     columns: config.columns || []
                                 }
                             })
@@ -110,16 +109,13 @@ class TableViewPlugin implements PluginValue {
                                   const cellIndex = (indexElem?.getAttribute("cell-index") as unknown) as number
                                   const attributeKey = table.getAttribute("modified-header");
                                   const position = this.getTablePosition(table);
-                                  const configs = this.view.state.field(tableConfigStateField);
-                                  const tableConfig = position !== null ? configs.get(position) : undefined;
-                                  const tableId = tableConfig?.tableId || 'default';
 
                                   if (attributeKey === "Index") {
                                       changes = indexTable(this.view, table, cellIndex);
                                       if (changes) {
                                         this.view.dispatch({
                                         changes: changes,
-                                        effects: setIndexEffect.of({[tableId]: rows })
+                                        effects: setIndexEffect.of({[position ?? 'default']: rows })
                                       });
                                   }
                                 } else if (attributeKey?.contains("Money")) {
@@ -129,16 +125,16 @@ class TableViewPlugin implements PluginValue {
                                     if (changes) {
                                       this.view.dispatch({
                                       changes: changes,
-                                      effects: setIndexEffect.of({[tableId]: rows })
-                                      });
+                                      effects: setIndexEffect.of({[position ?? 'default']: rows })
+                                    });
                                     }
                                 } else if (attributeKey === "Enum") {
                                     changes = enumTable(this.view, table, cellIndex)
                                     if (changes) {
                                       this.view.dispatch({
                                       changes: changes,
-                                      effects: [setEnumEffect.of({[tableId]: rows })]
-                                      });
+                                      effects: [setEnumEffect.of({[position ?? 'default']: rows })]
+                                    });
                                     }
                                 }
                                     indexElem?.removeAttribute("cell-index")

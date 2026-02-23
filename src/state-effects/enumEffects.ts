@@ -4,7 +4,6 @@ export interface TableConfigPayload {
   position: number; 
   columnName: string;
   tableConfig: {
-    tableId: string;
     columns: unknown;
   };
 }
@@ -13,13 +12,12 @@ export const upsertTableConfigEffect = StateEffect.define<TableConfigPayload>();
 export const removeTableConfigEffect = StateEffect.define<number>(); 
 
 type ConfigMap = Map<number, {
-  tableId: string;
   columns: unknown;
 }>;
 
 export const tableConfigStateField = StateField.define<ConfigMap>({
   create() {
-    return new Map<number, { tableId: string; columns: unknown }>();
+    return new Map<number, { columns: unknown }>();
   },
 
   update(oldValue, tr) {

@@ -1,12 +1,10 @@
 import { Editor, Notice, parseYaml, stringifyYaml } from 'obsidian'
 
 export interface TableConfig {
-    tableId: string,
     columns: Record<string, string[]>[]
 }
 
 export class Table {
-    tableId: string
     editor: Editor
     config: TableConfig
     tableElement: HTMLElement | null = null
@@ -139,7 +137,7 @@ export class Table {
      */
     public async getTableConfig(): Promise<{TableConfig: TableConfig | null; position: number | null}> {
         const lines = this.getConfigLinesForTable()
-        let config: TableConfig = {tableId: crypto.randomUUID(), columns: []}
+        let config: TableConfig = {columns: []}
         const position = this.getTablePosition();
         
         if (!lines) {
@@ -219,9 +217,7 @@ export class Table {
             return;
         }
         
-        const tableId = crypto.randomUUID();
         const configObj = {
-            tableId: tableId,
             columns: newConfig
         };
         const configYaml = stringifyYaml(configObj);
@@ -233,8 +229,6 @@ export class Table {
         );
         
         new Notice("Created new config block for this table.");
-        
-        this.tableId = tableId;
     }
 
     /** Update the table config with new enum options for a specific column, creating the columns array if it doesn't exist yet
@@ -344,7 +338,6 @@ export class Table {
         }
         
         const configObj = { 
-            tableId: config.TableConfig.tableId, 
             columns: config.TableConfig.columns 
         };
         const configYaml = stringifyYaml(configObj);        
