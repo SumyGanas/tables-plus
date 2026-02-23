@@ -1,6 +1,6 @@
 {
 	"name": "tables-plus",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Enhance standard markdown tables with powerful features like currency formatting, auto-indexing rows, and creating a dropdown menu inside a table cell.",
 	"main": "main.js",
 	"scripts": {
