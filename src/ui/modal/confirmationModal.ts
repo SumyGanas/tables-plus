@@ -44,10 +44,6 @@ export class EnumClearConfirmationModal extends Modal {
         const buttonContainer = contentEl.createDiv({ 
             cls: 'tp-confirmation-buttons'
         });
-        buttonContainer.style.display = 'flex';
-        buttonContainer.style.justifyContent = 'flex-end';
-        buttonContainer.style.gap = '8px';
-        buttonContainer.style.marginTop = '16px';
         
         new ButtonComponent(buttonContainer)
             .setButtonText('Cancel')
